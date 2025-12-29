@@ -1,5 +1,6 @@
 #include "WebServer.h"
 
+#include <Arduino.h>
 #include <ArduinoJson.h>
 #include <WiFiS3.h>
 
@@ -58,17 +59,22 @@ void SternWebServer::handleStatePost() {
   }
 
   effectState.isOn = doc["isOn"].as<bool>();
-  effectState.brightness = doc["brightness"].as<uint8_t>();
-  effectState.speed = doc["speed"].as<uint8_t>();
-  effectState.name = doc["effect"].as<String>();
+  effectState.brightness = constrain(doc["brightness"].as<int>(), 0, 255);
+  effectState.speed = constrain(doc["speed"].as<int>(), 0, 255);
+  String requestedEffect = doc["effect"].as<String>();
 
   JsonObject color = doc["color"].as<JsonObject>();
-  effectState.color.r = color["r"].as<uint8_t>();
-  effectState.color.g = color["g"].as<uint8_t>();
-  effectState.color.b = color["b"].as<uint8_t>();
-  effectState.color.w = color["w"].as<uint8_t>();
+  effectState.color.r = constrain(color["r"].as<int>(), 0, 255);
+  effectState.color.g = constrain(color["g"].as<int>(), 0, 255);
+  effectState.color.b = constrain(color["b"].as<int>(), 0, 255);
+  effectState.color.w = constrain(color["w"].as<int>(), 0, 255);
 
-  effectManager.setActiveEffect(effectState.name);
+  if (!effectManager.setActiveEffect(requestedEffect)) {
+    server.send(400, "application/json", "{\"error\":\"unknown effect\"}");
+    return;
+  }
+
+  effectState.name = effectManager.activeEffectName();
 
   server.send(200, "application/json", "{\"status\":\"ok\"}");
 }

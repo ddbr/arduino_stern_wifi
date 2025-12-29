@@ -10,11 +10,13 @@ void EffectManager::registerEffect(std::unique_ptr<Effect> effect) {
   }
 }
 
-void EffectManager::setActiveEffect(const String &name) {
+bool EffectManager::setActiveEffect(const String &name) {
   auto it = effects.find(name);
   if (it != effects.end()) {
     active = it->second.get();
+    return true;
   }
+  return false;
 }
 
 String EffectManager::activeEffectName() const { return active ? active->getName() : ""; }
