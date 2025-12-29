@@ -5,7 +5,7 @@
 #include "effects/EffectFactory.h"
 #include "effects/EffectManager.h"
 #include "led/StripController.h"
-#include "network/OtaHandler.h"
+//#include "network/OtaHandler.h"
 #include "network/WiFiManager.h"
 #include "web/WebServer.h"
 

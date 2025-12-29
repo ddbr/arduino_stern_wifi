@@ -1,7 +1,7 @@
 #include "WiFiManager.h"
-
 #include <Arduino.h>
 #include <MDNS_Generic.h>
+#include "../config.h" 
 
 void WiFiManager::begin() { connect(); }
 

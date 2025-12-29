@@ -1,12 +1,9 @@
 #pragma once
 
-#include <WebServer.h>
+#include <WiFiS3.h>
 
 #include "../effects/EffectManager.h"
 #include "../network/WiFiManager.h"
-#include "index_html.h"
-#include "style_css.h"
-#include "app_js.h"
 
 class SternWebServer {
  public:
@@ -15,12 +12,14 @@ class SternWebServer {
   void loop();
 
  private:
-  void registerRoutes();
-  void handleStateGet();
-  void handleStatePost();
+  void handleClient(WiFiClient &client);
+  void sendResponse(WiFiClient &client, int code, const char *contentType, const char *body);
+  void sendResponseProgmem(WiFiClient &client, int code, const char *contentType, const char *bodyProgmem);
 
-  WebServer server;
+  void handleStateGet(WiFiClient &client);
+  void handleStatePost(WiFiClient &client, const String &body);
+
+  WiFiServer server;
   EffectManager &effectManager;
   EffectState &effectState;
 };
-
