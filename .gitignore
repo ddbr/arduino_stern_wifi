@@ -1,0 +1,11 @@
+# PlatformIO
+.pio/
+.vscode/
+
+# Build artifacts
+*.elf
+*.bin
+*.map
+
+# Local config
+platformio_override.ini
